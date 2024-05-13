@@ -8,30 +8,64 @@ struct ContentView: View {
     @State private var apiError: APIError?
 
     var body: some View {
-        VStack {
-            if let error = apiError {
-                Text("Error: \(error.message)")
-                    .foregroundColor(.red)
+        NavigationView {
+            VStack {
+                Text("Dashboard")
+                    .font(.title)
+                    .foregroundColor(.white)
                     .padding()
-            } else {
-                Text(greeting)
+                    .background(Color.blue)
+                
+                Spacer()
+                
+                VStack(alignment: .leading, spacing: 10) {
+                    Text(greeting)
+                        .padding()
+                    ChartView(data: chartData)
+                    TabView {
+                        ListView(data: topLinks, title: "Top links")
+                            .tabItem {
+                                Text("Top links")
+                            }
+                        ListView(data: recentLinks, title: "Recent links")
+                            .tabItem {
+                                Text("Recent links")
+                            }
+                    }
                     .padding()
-                ChartView(data: chartData)
-                TabView {
-                    ListView(data: topLinks, title: "Top links")
-                        .tabItem {
-                            Text("Top links")
-                        }
-                    ListView(data: recentLinks, title: "Recent links")
-                        .tabItem {
-                            Text("Recent links")
-                        }
+                }
+                .onAppear {
+                    fetchData()
+                }
+                
+                Spacer()
+                
+                HStack {
+                    Button("Talk with us") {}
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(5)
+                    
+                    Button("Frequently Asked QA's") {}
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(5)
+                    
+                    Button("About us") {}
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(5)
                 }
                 .padding()
+                .background(Color.white)
+                .cornerRadius(10)
+                .shadow(radius: 5)
             }
-        }
-        .onAppear {
-            fetchData()
+            .navigationBarHidden(true)
+            .navigationBarTitle("")
         }
     }
 
@@ -71,12 +105,6 @@ struct ContentView: View {
         case 12..<17: return "afternoon"
         default: return "evening"
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }
 
@@ -125,4 +153,10 @@ struct APIError: Codable {
     let message: String
     let name: String
     let errors: [String]
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }
